@@ -107,6 +107,7 @@ class Blockchain:
 
 # Creating a Web App
 app = Flask(__name__)
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
 
 # Creating an address for the node on port
 node_address = str(uuid4()).replace('-', '')
@@ -122,7 +123,7 @@ def mine_block():
     previous_proof = previous_block['proof']
     proof = blockchain.proof_of_work(previous_proof)
     previous_hash = blockchain.hash(previous_block)
-    blockchain.add_transaction(sender=node_address, receiver='Hadelin', amount=1)
+    blockchain.add_transaction(sender=node_address, receiver='Kirill', amount=1)
     block = blockchain.create_block(proof, previous_hash)
     response = {
         'message': 'Congratulations, you just mined a block!',
@@ -183,7 +184,7 @@ def connect_node():
 
 
 # Replacing the chain by the longest chain if need
-@app.route('/replace_chain', mothods=['GET'])
+@app.route('/replace_chain', methods=['GET'])
 def replace_chain():
     is_chain_replaced = blockchain.replace_chain()
     if is_chain_replaced:
@@ -200,4 +201,5 @@ def replace_chain():
 
 
 # Running the app
-app.run(host='0.0.0.0', port=5000)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5002)
